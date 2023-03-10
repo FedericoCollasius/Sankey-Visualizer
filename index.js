@@ -120,10 +120,10 @@ link
   })
   .style("stroke", function (link, i) {
     return {
-      process: "blue",
       steam: "red",
-      lost: "orange",
-      tip: "brown",
+      industrial: "cyan",
+      potable: "green",
+      drain: "yellow",
     }[link.type];
   });
 
