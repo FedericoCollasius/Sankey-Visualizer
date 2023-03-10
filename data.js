@@ -25,6 +25,8 @@ const data = {
     { name: "TK diario 16 m3", type: "tank" },
     { name: "TKs Calderas 2 (4 m3)", type: "tank" },
     { name: "Tanque Potable 20 m3", type: "tank" },
+    { name: "Colector Industrial", type: "collector"},
+    { name: "Colector cloacal", type: "collector"}
   ],
   links: [
     {
@@ -123,5 +125,35 @@ const data = {
       value: 20075,
       type: "potable",
     },
+    {
+      source: "Colector cloacal",
+      target: "PTEL", 
+      value: 10658.55,
+      type: "idk"
+    },
+    {
+      source: "Tanque Potable 20 m3", 
+      target: "Primario",
+      value: 6647.43,
+      type: "potable"
+    }, 
+    {
+      source: "Tanque Potable 20 m3", 
+      target: "Secundario",
+      value: 1589.50,
+      type: "potable"
+    }, 
+    {
+      source: "Tanque Potable 20 m3", 
+      target: "Depositos",
+      value: 0,
+      type: "potable"
+    }, 
+    {
+      source: "Tanque Potable 20 m3", 
+      target: "Baños/Comedor",
+      value: 10529.43,
+      type: "potable"
+    }
   ],
 };
