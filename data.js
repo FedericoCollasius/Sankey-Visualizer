@@ -33,79 +33,79 @@ const data = {
       source: "Pozo 1",
       target: "Tanque Ppal",
       value: 39071.27,
-      type: "process",
+      type: "industrial",
     },
     {
       source: "Pozo 2",
       target: "Tanque Ppal",
       value: 14299.4,
-      type: "process",
+      type: "industrial",
     },
     {
       source: "Pozo 3",
       target: "Tanque Ppal",
       value: 31953.93,
-      type: "process",
+      type: "industrial",
     },
     {
       source: "Pozo 4",
       target: "A oficinas, trainig center, vigilancia",
       value: 31953.93,
-      type: "process",
+      type: "industrial",
     },
     {
       source: "Tanque Ppal",
       target: "API",
       value: 1647.96,
-      type: "process",
+      type: "industrial",
     },
     {
       source: "Tanque Ppal",
       target: "Torre de enfriamiento",
       value: 22993.04,
-      type: "process",
+      type: "industrial",
     },
     {
       source: "Torre de enfriamiento",
       target: "Calderas",
       value: 2240.9,
-      type: "process",
+      type: "industrial",
     },
     {
       source: "Tanque Ppal",
       target: "Sec.Arsenico",
       value: 5851.46,
-      type: "process",
+      type: "industrial",
     },
     {
       source: "Tanque Ppal",
       target: "Osmosis",
       value: 36434.3,
-      type: "process",
+      type: "industrial",
     },
     {
       source: "Tanque Ppal",
       target: "Primario",
       value: 718.39,
-      type: "process",
+      type: "industrial",
     },
     {
       source: "Tanque Ppal",
       target: "Secundario",
       value: 266.5,
-      type: "process",
+      type: "industrial",
     },
     {
       source: "Tanque Ppal",
       target: "Depositos",
       value: 1325,
-      type: "process",
+      type: "industrial",
     },
     {
       source: "Tanque Ppal",
       target: "Baños/Comedor",
       value: 0,
-      type: "process",
+      type: "industrial",
     },
     {
       source: "Primario",
@@ -117,7 +117,7 @@ const data = {
       source: "Primario",
       target: "Agua en prodcuto",
       value: 1493.34,
-      type: "process",
+      type: "industrial",
     },
     {
       source: "PTEL",
@@ -129,7 +129,7 @@ const data = {
       source: "Colector cloacal",
       target: "PTEL", 
       value: 10658.55,
-      type: "idk"
+      type: "drain"
     },
     {
       source: "Tanque Potable 20 m3", 
@@ -154,6 +154,24 @@ const data = {
       target: "Baños/Comedor",
       value: 10529.43,
       type: "potable"
+    }, 
+    {
+      source: "Osmosis", 
+      target: "Tanque Potable 20 m3", 
+      value: 21170.7, 
+      type: "potable"
+    }, 
+    {
+      source: "Osmosis", 
+      target: "Arroyo", 
+      value: 10930.29, 
+      type: "industrial"
+    }, 
+    {
+      source: "Osmosis", 
+      target: "TKs Calderas 2 (4 m3)",
+      value: 10184.78, 
+      type: "industrial"
     }
   ],
 };
