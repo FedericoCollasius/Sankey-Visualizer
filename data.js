@@ -26,7 +26,8 @@ const data = {
     { name: "TKs Calderas 2 (4 m3)", type: "tank" },
     { name: "Tanque Potable 20 m3", type: "tank" },
     { name: "Colector Industrial", type: "collector"},
-    { name: "Colector cloacal", type: "collector"}
+    { name: "Colector cloacal", type: "collector"}, 
+    { name: "Condensado", type: "coso"}
   ],
   links: [
     {
@@ -172,6 +173,48 @@ const data = {
       target: "TKs Calderas 2 (4 m3)",
       value: 10184.78, 
       type: "industrial"
-    }
+    }, 
+    {
+      source: "TK diario 16 m3",
+      target: "Desaireador",
+      value: 10185, 
+      type: "potable"
+    }, 
+    {
+      source: "TKs Calderas 2 (4 m3)",
+      target: "TK diario 16 m3",
+      value: 0, 
+      type: "potable"
+    },
+    {
+      source: "Condensado", 
+      target: "TK diario 16 m3",
+      value: 2098.4,
+      type: "potable"
+    }, 
+    {
+      source: "Sec.Arsenico",
+      target: "Tanque Potable 20 m3",
+      value: 31355.5,
+      type: "industrial"
+    }, 
+    {
+      source: "Desaireador",
+      target: "Calderas",
+      value: 10185,
+      type: "potable"
+    }, 
+    {
+      source: "Calderas", 
+      target: "Desaireador", 
+      value: 305, 
+      type: "steam"
+    }, 
+    {
+      source: "Calderas",
+      target: "Perdidas",
+      value: 10180,
+      type: "steam"
+    }, 
   ],
 };
