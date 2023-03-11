@@ -42,8 +42,6 @@ let sankeyData = sankey(data);
 let sankeyNodes = sankeyData.nodes;
 let sankeyLinks = sankeyData.links;
 
-console.log(sankeyLinks);
-
 let depthExtent = d3.extent(sankeyNodes, function (d) {
   return d.depth;
 });
@@ -84,26 +82,27 @@ node
     return (d.x0 + d.x1) / 2;
   })
   .attr("y", function (d) {
-    return d.y0 - 12;
+    return d.y0 - 2;
   })
-  .attr("dy", "0.35em")
   .attr("text-anchor", "middle")
   .text(function (d) {
     return d.name;
   });
 
+/*
 node
   .append("image")
-  .attr("height", 50)
+  .attr("height", 15)
   .attr("x", function (d) {
-    return (d.x0 + d.x1) / 2 - 15;
+    return (d.x0 + d.x1) / 2 - 5;
   })
   .attr("y", function (d) {
-    return d.y0 - 70;
+    return d.y0 - 20;
   })
   .attr("href", function (d) {
     return `images/${d.type}.svg`;
   });
+  */
 
 var link = linkG.data(sankeyLinks).enter().append("g");
 

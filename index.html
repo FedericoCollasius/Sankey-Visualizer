@@ -1,26 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://bossanova.uk/jspreadsheet/v4/jexcel.css"
-      type="text/css"
-    />
-    <script src="https://jsuites.net/v4/jsuites.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://jsuites.net/v4/jsuites.css"
-      type="text/css"
-    />
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.0.0/jspdf.umd.min.js"
-      integrity="sha512-g77bZKU4ktH2I5nNioWzOMcbd3fN/svB0vQM73Uo5GRn/EGfcSJB0DlR1ithxnFsDaa0HmlOwHYiUFeM1P3RRw=="
-      crossorigin="anonymous"
-    ></script>
+    <link rel="stylesheet" href="external/jexcel.css" type="text/css" />
+    <link rel="stylesheet" href="external/jsuites.css" type="text/css" />
+    <script src="external/jexcel.js"></script>
+    <script src="external/jsuites.js"></script>
+    <script src="external/jspdf.umd.min.js"></script>
     <script src="external/svg2pdf.umd.min.js"></script>
-
-    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="external/d3.v4.min.js"></script>
     <script src="external/d3-sankey-circular.js"></script>
     <script src="external/d3-path-arrows.js"></script>
 
@@ -117,22 +104,16 @@
         ],
       });
     </script>
-    <div id="chart"></div>
+    <svg width="100%" height="100%" viewBox="0 0 355.6 215.9" id="chart"></svg>
     <script src="index.js"></script>
 
     <script>
-      // PORTRAIT
-      const WIDTH = 2000;
-      const HEIGHT = 1008;
-
-      const doc = new jspdf.jsPDF("landscape", "mm", "legal", [0, 0]);
+      const doc = new jspdf.jsPDF("landscape", "mm", "legal");
 
       const element = document.querySelector("#chart svg");
-      doc
-        .svg(element)
-        .then(() => {
-          doc.save("myPDF.pdf");
-        });
+      doc.svg(element).then(() => {
+        doc.save("myPDF.pdf");
+      });
     </script>
   </body>
 </html>
