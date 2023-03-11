@@ -5,6 +5,7 @@ function pathArrows() {
   var arrowLength = 10;
   var gapLength = 50;
   var arrowHeadSize = 4;
+  var strokeWidth = 1;
   var path = null;
 
   function appendArrows(selection) {
@@ -13,7 +14,7 @@ function pathArrows() {
     let arrows = selection
       .append("path")
       .attr("d", path)
-      .style("stroke-width", 1)
+      .style("stroke-width", strokeWidth)
       .style("stroke", "black")
       .style("stroke-dasharray", arrowLength + "," + gapLength);
 
@@ -107,6 +108,12 @@ function pathArrows() {
   appendArrows.arrowHeadSize = function (value) {
     if (!arguments.length) return arrowHeadSize;
     arrowHeadSize = value;
+    return appendArrows;
+  };
+
+  appendArrows.strokeWidth = function (value) {
+    if (!arguments.length) return strokeWidth;
+    strokeWidth = value;
     return appendArrows;
   };
 

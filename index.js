@@ -5,7 +5,7 @@ var height = 215.9;
 var sankey = d3
   .sankeyCircular()
   .nodeWidth(3)
-  //.nodePadding(30)
+  .nodePadding(30)
   .nodePaddingRatio(0.8)
   .size([width, height])
   .nodeId(function (d) {
@@ -27,16 +27,14 @@ var g = svg
 
 var linkG = g
   .append("g")
-  .attr("class", "links")
   .attr("fill", "none")
   .attr("stroke-opacity", 0.3)
   .selectAll("path");
 
 var nodeG = g
   .append("g")
-  .attr("class", "nodes")
   .attr("font-family", "monospace")
-  .attr("font-size", 1.5 + "mm")
+  .attr("font-size", 3)
   .selectAll("g");
 
 //run the Sankey + circular over the data
@@ -111,7 +109,6 @@ var link = linkG.data(sankeyLinks).enter().append("g");
 
 link
   .append("path")
-  .attr("class", "sankey-link")
   .attr("d", function (link) {
     return link.path;
   })
@@ -128,16 +125,12 @@ link
   });
 
 let arrows = pathArrows()
-  .arrowLength(10)
-  .gapLength(150)
-  .arrowHeadSize(4)
+  .arrowLength(4)
+  .gapLength(75)
+  .arrowHeadSize(1.5)
+  .strokeWidth(0.7)
   .path(function (link) {
     return link.path;
   });
 
-var arrowsG = linkG
-  .data(sankeyLinks)
-  .enter()
-  .append("g")
-  .attr("class", "g-arrow")
-  .call(arrows);
+var arrowsG = linkG.data(sankeyLinks).enter().append("g").call(arrows);
