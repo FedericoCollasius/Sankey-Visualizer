@@ -1,94 +1,119 @@
-var margin = { top: 0, right: 0, bottom: 0, left: 0 };
-var width = 355.6;
-var height = 215.9;
+const makeSankey = () => {
+  document.querySelector("#chart").innerHTML = "";
 
-var sankey = d3
-  .sankeyCircular()
-  .nodeWidth(3)
-  .nodePadding(30)
-  .nodePaddingRatio(0.8)
-  .size([width, height])
-  .nodeId(function (d) {
-    return d.name;
-  })
-  .nodeAlign(d3.sankeyJustify)
-  .iterations(1024)
-  .circularLinkGap(2);
+  let margin = { top: 0, right: 12, bottom: 0, left: 12 };
+  let width = 355.6;
+  let height = 215.9;
 
-var svg = d3
-  .select("#chart")
-  .append("svg")
-  .attr("width", width + margin.left + margin.right + "mm")
-  .attr("height", height + margin.top + margin.bottom + "mm");
+  let sankey = d3
+    .sankeyCircular()
+    .nodeWidth(3)
+    .nodePadding(30)
+    .nodePaddingRatio(0.8)
+    .size([
+      width - margin.left - margin.right,
+      height - margin.top - margin.bottom,
+    ])
+    .nodeId(function (d) {
+      return d.name;
+    })
+    .nodeAlign(d3.sankeyJustify)
+    .iterations(1024)
+    .circularLinkGap(2);
 
-var g = svg
-  .append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  let svg = d3
+    .select("#chart")
+    .append("svg")
+    .attr("width", width + "mm")
+    .attr("height", height + "mm");
 
-var linkG = g
-  .append("g")
-  .attr("fill", "none")
-  .attr("stroke-opacity", 0.3)
-  .selectAll("path");
+  let g = svg
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var nodeG = g
-  .append("g")
-  .attr("font-family", "monospace")
-  .attr("font-size", 3)
-  .selectAll("g");
+  let linkG = g
+    .append("g")
+    .attr("fill", "none")
+    .attr("stroke-opacity", 0.3)
+    .selectAll("path");
 
-//run the Sankey + circular over the data
-let sankeyData = sankey(data);
-let sankeyNodes = sankeyData.nodes;
-let sankeyLinks = sankeyData.links;
+  let nodeG = g
+    .append("g")
+    .attr("font-family", "Arial")
+    .attr("font-size", 3)
+    .selectAll("g");
 
-let depthExtent = d3.extent(sankeyNodes, function (d) {
-  return d.depth;
-});
-var node = nodeG.data(sankeyNodes).enter().append("g");
+  console.log();
 
-node
-  .append("rect")
-  .attr("x", function (d) {
-    return d.x0;
-  })
-  .attr("y", function (d) {
-    return d.y0;
-  })
-  .attr("height", function (d) {
-    return d.y1 - d.y0;
-  })
-  .attr("width", function (d) {
-    return d.x1 - d.x0;
-  })
-  .style("fill", function (d) {
-    return (
-      {
-        well: "#4975ff",
-        tank: "#002fc3",
-        coso: "#ff00ff",
-        cooling_tower: "#ff00ff",
-        boiler: "#ff00ff",
-        plant: "#ff00ff",
-      }[d.type] || "black"
-    );
-  })
-  .style("opacity", 1);
+  if (window.nodesTable === undefined || window.linksTable === undefined) {
+    return;
+  }
 
-node
-  .append("text")
-  .attr("x", function (d) {
-    return (d.x0 + d.x1) / 2;
-  })
-  .attr("y", function (d) {
-    return d.y0 - 2;
-  })
-  .attr("text-anchor", "middle")
-  .text(function (d) {
-    return d.name;
+  const nodesData = window.nodesTable.getData();
+  const linksData = window.linksTable.getData();
+
+  //run the Sankey + circular over the data
+  let sankeyData = sankey({
+    nodes: nodesData.map((arr) => ({
+      name: arr[1],
+      color: arr[2],
+    })),
+    links: linksData.map((arr) => ({
+      source: nodesData.find((node) => node[0] === arr[0])[1],
+      target: nodesData.find((node) => node[0] === arr[1])[1],
+      value: arr[3],
+    })),
   });
+  let sankeyNodes = sankeyData.nodes;
+  let sankeyLinks = sankeyData.links;
 
-/*
+  let depthExtent = d3.extent(sankeyNodes, function (d) {
+    return d.depth;
+  });
+  let node = nodeG.data(sankeyNodes).enter().append("g");
+
+  node
+    .append("rect")
+    .attr("x", function (d) {
+      return d.x0;
+    })
+    .attr("y", function (d) {
+      return d.y0;
+    })
+    .attr("height", function (d) {
+      return d.y1 - d.y0;
+    })
+    .attr("width", function (d) {
+      return d.x1 - d.x0;
+    })
+    .style("fill", function (d) {
+      return (
+        {
+          well: "#4975ff",
+          tank: "#002fc3",
+          coso: "#ff00ff",
+          cooling_tower: "#ff00ff",
+          boiler: "#ff00ff",
+          plant: "#ff00ff",
+        }[d.type] || "black"
+      );
+    })
+    .style("opacity", 1);
+
+  node
+    .append("text")
+    .attr("x", function (d) {
+      return (d.x0 + d.x1) / 2;
+    })
+    .attr("y", function (d) {
+      return d.y0 - 2;
+    })
+    .attr("text-anchor", "middle")
+    .text(function (d) {
+      return d.name;
+    });
+
+  /*
 node
   .append("image")
   .attr("height", 15)
@@ -103,32 +128,33 @@ node
   });
   */
 
-var link = linkG.data(sankeyLinks).enter().append("g");
+  let link = linkG.data(sankeyLinks).enter().append("g");
 
-link
-  .append("path")
-  .attr("d", function (link) {
-    return link.path;
-  })
-  .style("stroke-width", function (d) {
-    return Math.max(0.3, d.width);
-  })
-  .style("stroke", function (link, i) {
-    return {
-      steam: "red",
-      industrial: "cyan",
-      potable: "green",
-      drain: "yellow",
-    }[link.type];
-  });
+  link
+    .append("path")
+    .attr("d", function (link) {
+      return link.path;
+    })
+    .style("stroke-width", function (d) {
+      return Math.max(0.3, d.width);
+    })
+    .style("stroke", function (link, i) {
+      return {
+        steam: "red",
+        industrial: "cyan",
+        potable: "green",
+        drain: "yellow",
+      }[link.type];
+    });
 
-let arrows = pathArrows()
-  .arrowLength(4)
-  .gapLength(75)
-  .arrowHeadSize(1.5)
-  .strokeWidth(0.7)
-  .path(function (link) {
-    return link.path;
-  });
+  let arrows = pathArrows()
+    .arrowLength(4)
+    .gapLength(40)
+    .arrowHeadSize(1.5)
+    .strokeWidth(0.5)
+    .path(function (link) {
+      return link.path;
+    });
 
-var arrowsG = linkG.data(sankeyLinks).enter().append("g").call(arrows);
+  let arrowsG = linkG.data(sankeyLinks).enter().append("g").call(arrows);
+};

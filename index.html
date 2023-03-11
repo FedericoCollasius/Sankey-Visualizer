@@ -20,24 +20,33 @@
       <div class="left">
         <h1>Visualizador de Sankey</h1>
         <div class="buttons">
+          <button style="background-color: #f54040" onclick="download()">
+            Descargar PDF (oficio)
+          </button>
+          <button>Cargar ejemplo</button>
+          <br />
+          <br />
           <button class="tab-link" data-tab="nodes-tab">Nodos</button>
           <button class="tab-link" data-tab="link-types-tab">
             Tipos de enlace
           </button>
           <button class="tab-link" data-tab="links-tab">Enlaces</button>
-          <button style="background-color: #f54040" onclick="download()">
-            Descargar PDF (oficio)
-          </button>
         </div>
         <div class="tabs">
           <div class="tab nodes-tab">
             <div id="table-nodes"></div>
+            <br />
+            <button onclick="nodesTable.insertRow()">Agregar fila</button>
           </div>
           <div class="tab link-types-tab">
             <div id="table-link-type"></div>
+            <br />
+            <button onclick="linksTypeTable.insertRow()">Agregar fila</button>
           </div>
           <div class="tab links-tab">
             <div id="table-links"></div>
+            <br />
+            <button onclick="linksTable.insertRow()">Agregar fila</button>
           </div>
         </div>
       </div>
@@ -63,9 +72,6 @@
       $(".tab-link:first").click();
     </script>
 
-    <script src="data.js"></script>
-    <script src="index.js"></script>
-
     <script>
       const download = () => {
         const doc = new jspdf.jsPDF("landscape", "mm", "legal");
@@ -87,9 +93,13 @@
       };
     </script>
 
+    <script src="data.js"></script>
+    <script src="index.js"></script>
+
     <script>
-      jspreadsheet(document.getElementById("table-nodes"), {
+      var nodesTable = jspreadsheet(document.getElementById("table-nodes"), {
         data: nodes,
+        copyCompatibility: false,
         columns: [
           {
             type: "hidden",
@@ -110,32 +120,36 @@
             render: "square",
           },
         ],
+        //updateTable: () => makeSankey(),
       });
-      jspreadsheet(document.getElementById("table-link-type"), {
-        data: linkTypes,
-        columns: [
-          {
-            type: "hidden",
-            width: 50,
-            readOnly: true,
-            primaryKey: true,
-            hidden: true,
-          },
-          {
-            type: "dropdown",
-            title: "Tipo de enlace",
-            type: "text",
-            width: 120,
-          },
-          {
-            type: "color",
-            title: "Color",
-            width: 80,
-            render: "square",
-          },
-        ],
-      });
-      jspreadsheet(document.getElementById("table-links"), {
+      var linksTypeTable = jspreadsheet(
+        document.getElementById("table-link-type"),
+        {
+          data: linkTypes,
+          columns: [
+            {
+              type: "hidden",
+              width: 50,
+              readOnly: true,
+              primaryKey: true,
+              hidden: true,
+            },
+            {
+              type: "dropdown",
+              title: "Tipo de enlace",
+              type: "text",
+              width: 120,
+            },
+            {
+              type: "color",
+              title: "Color",
+              width: 80,
+              render: "square",
+            },
+          ],
+        }
+      );
+      var linksTable = jspreadsheet(document.getElementById("table-links"), {
         data: links,
         columns: [
           {
@@ -171,6 +185,10 @@
           },
         ],
       });
+    </script>
+
+    <script>
+      makeSankey();
     </script>
   </body>
 </html>
