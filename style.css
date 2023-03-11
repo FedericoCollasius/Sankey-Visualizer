@@ -1,6 +1,6 @@
 * {
   font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue",
-  Ubuntu, sans-serif;
+    Ubuntu, sans-serif;
 }
 body {
   overflow: hidden;
@@ -35,10 +35,11 @@ button {
 .left {
   overflow: scroll;
   text-align: center;
-  min-width: 754px
+  min-width: 754px;
+  border-right: 1px dashed gray;
 }
 .buttons {
-    margin: 10px
+  margin: 10px;
 }
 .container {
   display: flex;

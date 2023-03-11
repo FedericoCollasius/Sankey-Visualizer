@@ -25,7 +25,7 @@
             Tipos de enlace
           </button>
           <button class="tab-link" data-tab="links-tab">Enlaces</button>
-          <button style="background-color: #f54040;" onclick="download()">
+          <button style="background-color: #f54040" onclick="download()">
             Descargar PDF (oficio)
           </button>
         </div>
@@ -60,22 +60,31 @@
         $(`.${tab}`).show();
       });
 
-    $(".tab-link:first").click();
+      $(".tab-link:first").click();
     </script>
 
     <script src="data.js"></script>
     <script src="index.js"></script>
 
     <script>
-        const download = () => {
-            const doc = new jspdf.jsPDF("landscape", "mm", "legal");
-            const d = new Date();
+      const download = () => {
+        const doc = new jspdf.jsPDF("landscape", "mm", "legal");
+        const d = new Date();
 
-            const element = document.querySelector("#chart svg");
-            doc.svg(element).then(() => {
-                doc.save("Sankey - " + d.getDate() + "_" + d.getMonth()+1 + "_" + d.getFullYear() + ".pdf");
-            });
-        }
+        const element = document.querySelector("#chart svg");
+        doc.svg(element).then(() => {
+          doc.save(
+            "Sankey - " +
+              d.getDate() +
+              "_" +
+              d.getMonth() +
+              1 +
+              "_" +
+              d.getFullYear() +
+              ".pdf"
+          );
+        });
+      };
     </script>
 
     <script>
