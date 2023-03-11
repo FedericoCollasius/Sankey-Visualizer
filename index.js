@@ -1,10 +1,10 @@
-var margin = { top: 30, right: 30, bottom: 30, left: 30 };
-var width = 800;
-var height = 600;
+var margin = { top: 0, right: 0, bottom: 0, left: 0 };
+var width = 355.6;
+var height = 215.9;
 
 var sankey = d3
   .sankeyCircular()
-  .nodeWidth(10)
+  .nodeWidth(3)
   //.nodePadding(30)
   .nodePaddingRatio(0.8)
   .size([width, height])
@@ -18,8 +18,8 @@ var sankey = d3
 var svg = d3
   .select("#chart")
   .append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom);
+  .attr("width", width + margin.left + margin.right + "mm")
+  .attr("height", height + margin.top + margin.bottom + "mm");
 
 var g = svg
   .append("g")
@@ -35,8 +35,8 @@ var linkG = g
 var nodeG = g
   .append("g")
   .attr("class", "nodes")
-  .attr("font-family", "sans-serif")
-  .attr("font-size", 10)
+  .attr("font-family", "monospace")
+  .attr("font-size", 1.5 + "mm")
   .selectAll("g");
 
 //run the Sankey + circular over the data
@@ -104,7 +104,7 @@ node
     return d.y0 - 70;
   })
   .attr("href", function (d) {
-    return `./images/${d.type}.svg`;
+    return `images/${d.type}.svg`;
   });
 
 var link = linkG.data(sankeyLinks).enter().append("g");
@@ -116,7 +116,7 @@ link
     return link.path;
   })
   .style("stroke-width", function (d) {
-    return Math.max(1, d.width);
+    return Math.max(0.3, d.width);
   })
   .style("stroke", function (link, i) {
     return {

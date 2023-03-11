@@ -1,21 +1,138 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://bossanova.uk/jspreadsheet/v4/jexcel.css"
+      type="text/css"
+    />
+    <script src="https://jsuites.net/v4/jsuites.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://jsuites.net/v4/jsuites.css"
+      type="text/css"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.0.0/jspdf.umd.min.js"
+      integrity="sha512-g77bZKU4ktH2I5nNioWzOMcbd3fN/svB0vQM73Uo5GRn/EGfcSJB0DlR1ithxnFsDaa0HmlOwHYiUFeM1P3RRw=="
+      crossorigin="anonymous"
+    ></script>
+    <script src="external/svg2pdf.umd.min.js"></script>
+
     <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="d3-sankey-circular.js"></script>
-    <script src="d3-path-arrows.js"></script>
+    <script src="external/d3-sankey-circular.js"></script>
+    <script src="external/d3-path-arrows.js"></script>
 
     <title>Fede's Sankey</title>
-    <style>
-      text {
-        font-size: 12px;
-        font-family: monospace;
-      }
-    </style>
   </head>
   <body>
-    <div id="chart"></div>
+    <div id="table-nodes"></div>
+    <div id="table-link-type"></div>
+    <div id="table-links"></div>
+
     <script src="data.js"></script>
+    <script>
+      jspreadsheet(document.getElementById("table-nodes"), {
+        data: nodes,
+        columns: [
+          {
+            type: "hidden",
+            width: 50,
+            readOnly: true,
+            primaryKey: true,
+            hidden: true,
+          },
+          {
+            type: "text",
+            title: "Nodo",
+            width: 180,
+          },
+          {
+            type: "color",
+            title: "Color",
+            width: 80,
+            render: "square",
+          },
+        ],
+      });
+      jspreadsheet(document.getElementById("table-link-type"), {
+        data: linkTypes,
+        columns: [
+          {
+            type: "hidden",
+            width: 50,
+            readOnly: true,
+            primaryKey: true,
+            hidden: true,
+          },
+          {
+            type: "dropdown",
+            title: "Tipo de enlace",
+            type: "text",
+            width: 120,
+          },
+          {
+            type: "color",
+            title: "Color",
+            width: 80,
+            render: "square",
+          },
+        ],
+      });
+      jspreadsheet(document.getElementById("table-links"), {
+        data: links,
+        columns: [
+          {
+            type: "dropdown",
+            title: "Fuente",
+            width: 180,
+            source: nodes.map(([id, name]) => ({ id, name })),
+          },
+          {
+            type: "dropdown",
+            title: "Sumidero",
+            width: 180,
+            source: nodes.map(([id, name]) => ({ id, name })),
+          },
+          {
+            type: "dropdown",
+            title: "Tipo de enlace",
+            width: 120,
+            source: linkTypes.map(([id, name]) => ({ id, name })),
+          },
+          {
+            type: "numeric",
+            title: "Valor",
+            width: 100,
+            mask: "#.##,00",
+            decimal: ",",
+          },
+          {
+            type: "dropdown",
+            title: "Unidad",
+            width: 100,
+            source: ["m3/año", "ton/año"],
+          },
+        ],
+      });
+    </script>
+    <div id="chart"></div>
     <script src="index.js"></script>
+
+    <script>
+      // PORTRAIT
+      const WIDTH = 2000;
+      const HEIGHT = 1008;
+
+      const doc = new jspdf.jsPDF("landscape", "mm", "legal", [0, 0]);
+
+      const element = document.querySelector("#chart svg");
+      doc
+        .svg(element)
+        .then(() => {
+          doc.save("myPDF.pdf");
+        });
+    </script>
   </body>
 </html>
