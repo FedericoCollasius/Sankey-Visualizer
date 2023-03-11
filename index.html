@@ -3,6 +3,7 @@
   <head>
     <link rel="stylesheet" href="external/jexcel.css" type="text/css" />
     <link rel="stylesheet" href="external/jsuites.css" type="text/css" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
     <script src="external/jexcel.js"></script>
     <script src="external/jsuites.js"></script>
     <script src="external/jspdf.umd.min.js"></script>
@@ -10,15 +11,73 @@
     <script src="external/d3.v4.min.js"></script>
     <script src="external/d3-sankey-circular.js"></script>
     <script src="external/d3-path-arrows.js"></script>
+    <script src="external/jquery-3.6.4.min.js"></script>
 
-    <title>Fede's Sankey</title>
+    <title>Visualizador de Sankey</title>
   </head>
   <body>
-    <div id="table-nodes"></div>
-    <div id="table-link-type"></div>
-    <div id="table-links"></div>
+    <div class="container">
+      <div class="left">
+        <h1>Visualizador de Sankey</h1>
+        <div class="buttons">
+          <button class="tab-link" data-tab="nodes-tab">Nodos</button>
+          <button class="tab-link" data-tab="link-types-tab">
+            Tipos de enlace
+          </button>
+          <button class="tab-link" data-tab="links-tab">Enlaces</button>
+          <button style="background-color: #f54040;" onclick="download()">
+            Descargar PDF (oficio)
+          </button>
+        </div>
+        <div class="tabs">
+          <div class="tab nodes-tab">
+            <div id="table-nodes"></div>
+          </div>
+          <div class="tab link-types-tab">
+            <div id="table-link-type"></div>
+          </div>
+          <div class="tab links-tab">
+            <div id="table-links"></div>
+          </div>
+        </div>
+      </div>
+      <div class="right">
+        <svg
+          width="100%"
+          height="100%"
+          viewBox="0 0 355.6 215.9"
+          id="chart"
+        ></svg>
+      </div>
+    </div>
+
+    <script>
+      $(".tab-link").click(function () {
+        const tab = $(this).data("tab");
+        $(".tab-link").removeClass("active");
+        $(".tab").hide();
+        $(this).addClass("active");
+        $(`.${tab}`).show();
+      });
+
+    $(".tab-link:first").click();
+    </script>
 
     <script src="data.js"></script>
+    <script src="index.js"></script>
+
+    <script>
+        const download = () => {
+            const doc = new jspdf.jsPDF("landscape", "mm", "legal");
+            const d = new Date();
+
+            const element = document.querySelector("#chart svg");
+            doc.svg(element).then(() => {
+                doc.save("Sankey - " + d.getDate() + "_" + d.getMonth()+1 + "_" + d.getFullYear() + ".pdf");
+            });
+        }
+    </script>
+
     <script>
       jspreadsheet(document.getElementById("table-nodes"), {
         data: nodes,
@@ -102,17 +161,6 @@
             source: ["m3/año", "ton/año"],
           },
         ],
-      });
-    </script>
-    <svg width="100%" height="100%" viewBox="0 0 355.6 215.9" id="chart"></svg>
-    <script src="index.js"></script>
-
-    <script>
-      const doc = new jspdf.jsPDF("landscape", "mm", "legal");
-
-      const element = document.querySelector("#chart svg");
-      doc.svg(element).then(() => {
-        doc.save("myPDF.pdf");
       });
     </script>
   </body>
