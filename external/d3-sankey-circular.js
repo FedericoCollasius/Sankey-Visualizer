@@ -129,7 +129,7 @@
   // Some constants for circular link calculations
   const verticalMargin = 25;
   const baseRadius = 10;
-  const scale = 0.3; //Possibly let user control this, although anything over 0.5 starts to get too cramped
+  const scale = 0.5; //Possibly let user control this, although anything over 0.5 starts to get too cramped
 
   var sankey = function () {
     // Set the default values

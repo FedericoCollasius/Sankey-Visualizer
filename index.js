@@ -45,7 +45,6 @@ let sankeyLinks = sankeyData.links;
 let depthExtent = d3.extent(sankeyNodes, function (d) {
   return d.depth;
 });
-
 var node = nodeG.data(sankeyNodes).enter().append("g");
 
 node
