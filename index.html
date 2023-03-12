@@ -36,12 +36,20 @@
           <div class="tab nodes-tab">
             <div id="table-nodes"></div>
             <br />
-            <button onclick="nodesTable.insertRow()">Agregar fila</button>
+            <button
+              onclick="nodesTable.insertRow([nodesTable.getData().reduce((acc, [id]) => Math.max(acc, id), 0) + 1, 'Nodo', 'red'])"
+            >
+              Agregar fila
+            </button>
           </div>
           <div class="tab link-types-tab">
             <div id="table-link-type"></div>
             <br />
-            <button onclick="linksTypeTable.insertRow()">Agregar fila</button>
+            <button
+              onclick="linksTypeTable.insertRow([linksTypeTable.getData().reduce((acc, [id]) => Math.max(acc, id), 0) + 1, 'Enalce', 'red'])"
+            >
+              Agregar fila
+            </button>
           </div>
           <div class="tab links-tab">
             <div id="table-links"></div>
@@ -97,16 +105,46 @@
     <script src="index.js"></script>
 
     <script>
+      function debounceMakeSankey() {
+        clearTimeout(window.debounceMakeSankeyTimeout);
+        window.debounceMakeSankeyTimeout = setTimeout(makeSankey, 100);
+      }
+
+      function updateTableDropdowns() {
+        if (linksTable) {
+          linksTable.options.columns[0].source =
+            linksTable.options.columns[1].source = nodes.map(([id, name]) => ({
+              id,
+              name,
+            }));
+          linksTable.options.columns[2].source = linkTypes.map(
+            ([id, name]) => ({
+              id,
+              name,
+            })
+          );
+          linksTable.setData(linksTable.getData());
+        }
+      }
+
+      function debounceUpdateTableDropdowns() {
+        clearTimeout(window.debounceUpdateTableDropdownsTimeout);
+        window.debounceUpdateTableDropdownsTimeout = setTimeout(
+          updateTableDropdowns,
+          100
+        );
+      }
+
       var nodesTable = jspreadsheet(document.getElementById("table-nodes"), {
         data: nodes,
         copyCompatibility: false,
         columns: [
           {
-            type: "hidden",
+            type: "text",
             width: 50,
             readOnly: true,
             primaryKey: true,
-            hidden: true,
+            title: "ID",
           },
           {
             type: "text",
@@ -120,7 +158,16 @@
             render: "square",
           },
         ],
-        //updateTable: () => makeSankey(),
+        updateTable: () => {
+          debounceMakeSankey();
+          debounceUpdateTableDropdowns();
+        },
+        contextMenu: function () {
+          return false;
+        },
+        onbeforepaste: function () {
+          return false;
+        },
       });
       var linksTypeTable = jspreadsheet(
         document.getElementById("table-link-type"),
@@ -128,11 +175,11 @@
           data: linkTypes,
           columns: [
             {
-              type: "hidden",
+              type: "text",
               width: 50,
               readOnly: true,
               primaryKey: true,
-              hidden: true,
+              title: "ID",
             },
             {
               type: "dropdown",
@@ -147,6 +194,16 @@
               render: "square",
             },
           ],
+          updateTable: () => {
+            debounceMakeSankey();
+            debounceUpdateTableDropdowns();
+          },
+          contextMenu: function () {
+            return false;
+          },
+          onbeforepaste: function () {
+            return false;
+          },
         }
       );
       var linksTable = jspreadsheet(document.getElementById("table-links"), {
@@ -156,19 +213,16 @@
             type: "dropdown",
             title: "Fuente",
             width: 180,
-            source: nodes.map(([id, name]) => ({ id, name })),
           },
           {
             type: "dropdown",
             title: "Sumidero",
             width: 180,
-            source: nodes.map(([id, name]) => ({ id, name })),
           },
           {
             type: "dropdown",
             title: "Tipo de enlace",
             width: 120,
-            source: linkTypes.map(([id, name]) => ({ id, name })),
           },
           {
             type: "numeric",
@@ -184,10 +238,13 @@
             source: ["m3/año", "ton/año"],
           },
         ],
+        updateTable: () => debounceMakeSankey(),
+
       });
     </script>
 
     <script>
+      updateTableDropdowns();
       makeSankey();
     </script>
   </body>

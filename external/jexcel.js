@@ -14968,7 +14968,8 @@ if (!jSuites && typeof require === "function") {
                   jexcel.current.options.data.length - 1
                 ) {
                   // New record in case selectedCell in the last row
-                  jexcel.current.insertRow();
+                  // DISABLED
+                  //jexcel.current.insertRow();
                 }
               }
             }
@@ -14988,7 +14989,8 @@ if (!jSuites && typeof require === "function") {
                   jexcel.current.options.data[0].length - 1
                 ) {
                   // New record in case selectedCell in the last column
-                  jexcel.current.insertColumn();
+                  // DISABLED
+                  //jexcel.current.insertColumn();
                 }
               }
             }

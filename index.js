@@ -43,26 +43,45 @@ const makeSankey = () => {
     .attr("font-size", 3)
     .selectAll("g");
 
-  console.log();
-
   if (window.nodesTable === undefined || window.linksTable === undefined) {
     return;
   }
 
   const nodesData = window.nodesTable.getData();
+  const linkTypeData = window.linksTypeTable.getData();
   const linksData = window.linksTable.getData();
+
+  const _nodes = nodesData.map((arr) => ({
+    id: arr[0],
+    name: arr[1],
+    color: arr[2],
+  }));
+  const _linkType = linkTypeData.map((arr) => ({
+    id: arr[0],
+    name: arr[1],
+    color: arr[2],
+  }));
+  const _links = linksData
+    .filter(
+      (arr) =>
+        nodesData.find((node) => node[0] == arr[0]) &&
+        nodesData.find((node) => node[0] == arr[1])
+    )
+    .map((arr) => ({
+      source: nodesData.find((node) => node[0] == arr[0])[1],
+      target: nodesData.find((node) => node[0] == arr[1])[1],
+      value: parseFloat(arr[3]) * (arr[4] === "ton/año" ? 1000 : 1),
+      color: (
+        _linkType.find((linkType) => linkType.id == arr[2]) || {
+          color: "black",
+        }
+      ).color,
+    }));
 
   //run the Sankey + circular over the data
   let sankeyData = sankey({
-    nodes: nodesData.map((arr) => ({
-      name: arr[1],
-      color: arr[2],
-    })),
-    links: linksData.map((arr) => ({
-      source: nodesData.find((node) => node[0] === arr[0])[1],
-      target: nodesData.find((node) => node[0] === arr[1])[1],
-      value: arr[3],
-    })),
+    nodes: _nodes,
+    links: _links,
   });
   let sankeyNodes = sankeyData.nodes;
   let sankeyLinks = sankeyData.links;
@@ -87,16 +106,7 @@ const makeSankey = () => {
       return d.x1 - d.x0;
     })
     .style("fill", function (d) {
-      return (
-        {
-          well: "#4975ff",
-          tank: "#002fc3",
-          coso: "#ff00ff",
-          cooling_tower: "#ff00ff",
-          boiler: "#ff00ff",
-          plant: "#ff00ff",
-        }[d.type] || "black"
-      );
+      return d.color;
     })
     .style("opacity", 1);
 
@@ -139,12 +149,7 @@ node
       return Math.max(0.3, d.width);
     })
     .style("stroke", function (link, i) {
-      return {
-        steam: "red",
-        industrial: "cyan",
-        potable: "green",
-        drain: "yellow",
-      }[link.type];
+      return link.color;
     });
 
   let arrows = pathArrows()
