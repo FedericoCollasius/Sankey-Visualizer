@@ -19,7 +19,7 @@ const makeSankey = () => {
     })
     .nodeAlign(d3.sankeyJustify)
     .iterations(1024)
-    .circularLinkGap(2);
+    .circularLinkGap(50);
 
   let svg = d3
     .select("#chart")

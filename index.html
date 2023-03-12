@@ -23,7 +23,7 @@
           <button style="background-color: #f54040" onclick="download()">
             Descargar PDF (oficio)
           </button>
-          <button>Cargar ejemplo</button>
+          <button onclick="loadSample()">Cargar ejemplo</button>
           <br />
           <br />
           <button class="tab-link" data-tab="nodes-tab">Nodos</button>
@@ -36,20 +36,12 @@
           <div class="tab nodes-tab">
             <div id="table-nodes"></div>
             <br />
-            <button
-              onclick="nodesTable.insertRow([nodesTable.getData().reduce((acc, [id]) => Math.max(acc, id), 0) + 1, 'Nodo', 'red'])"
-            >
-              Agregar fila
-            </button>
+            <button onclick="insertNodeRow()">Agregar fila</button>
           </div>
           <div class="tab link-types-tab">
             <div id="table-link-type"></div>
             <br />
-            <button
-              onclick="linksTypeTable.insertRow([linksTypeTable.getData().reduce((acc, [id]) => Math.max(acc, id), 0) + 1, 'Enalce', 'red'])"
-            >
-              Agregar fila
-            </button>
+            <button onclick="insertLinkTypeRow()">Agregar fila</button>
           </div>
           <div class="tab links-tab">
             <div id="table-links"></div>
@@ -105,6 +97,8 @@
     <script src="index.js"></script>
 
     <script>
+      const initials = loadInitials();
+
       function debounceMakeSankey() {
         clearTimeout(window.debounceMakeSankeyTimeout);
         window.debounceMakeSankeyTimeout = setTimeout(makeSankey, 100);
@@ -113,16 +107,18 @@
       function updateTableDropdowns() {
         if (linksTable) {
           linksTable.options.columns[0].source =
-            linksTable.options.columns[1].source = nodes.map(([id, name]) => ({
+            linksTable.options.columns[1].source = nodesTable
+              .getData()
+              .map(([id, name]) => ({
+                id,
+                name,
+              }));
+          linksTable.options.columns[2].source = linksTypeTable
+            .getData()
+            .map(([id, name]) => ({
               id,
               name,
             }));
-          linksTable.options.columns[2].source = linkTypes.map(
-            ([id, name]) => ({
-              id,
-              name,
-            })
-          );
           linksTable.setData(linksTable.getData());
         }
       }
@@ -136,7 +132,7 @@
       }
 
       var nodesTable = jspreadsheet(document.getElementById("table-nodes"), {
-        data: nodes,
+        data: initials.nodes,
         copyCompatibility: false,
         columns: [
           {
@@ -161,6 +157,7 @@
         updateTable: () => {
           debounceMakeSankey();
           debounceUpdateTableDropdowns();
+          saveToLocalStorage();
         },
         contextMenu: function () {
           return false;
@@ -172,7 +169,7 @@
       var linksTypeTable = jspreadsheet(
         document.getElementById("table-link-type"),
         {
-          data: linkTypes,
+          data: initials.linkTypes,
           columns: [
             {
               type: "text",
@@ -197,6 +194,7 @@
           updateTable: () => {
             debounceMakeSankey();
             debounceUpdateTableDropdowns();
+            saveToLocalStorage();
           },
           contextMenu: function () {
             return false;
@@ -207,7 +205,7 @@
         }
       );
       var linksTable = jspreadsheet(document.getElementById("table-links"), {
-        data: links,
+        data: initials.links,
         columns: [
           {
             type: "dropdown",
@@ -238,12 +236,26 @@
             source: ["m3/año", "ton/año"],
           },
         ],
-        updateTable: () => debounceMakeSankey(),
-
+        updateTable: () => {
+          debounceMakeSankey();
+          saveToLocalStorage();
+        },
       });
     </script>
 
     <script>
+      const insertNodeRow = () => {
+        const id =
+          nodesTable.getData().reduce((acc, [id]) => Math.max(acc, id), 0) + 1;
+        nodesTable.insertRow([id, "Nodo " + id, "red"]);
+      };
+      const insertLinkTypeRow = () => {
+        const id =
+          linksTypeTable.getData().reduce((acc, [id]) => Math.max(acc, id), 0) +
+          1;
+        linksTypeTable.insertRow([id, "Enlace " + id, "red"]);
+      };
+
       updateTableDropdowns();
       makeSankey();
     </script>
