@@ -1,5 +1,11 @@
+
+@font-face {
+    font-family: Segoe;
+    src: url("external/font/Segoe UI.ttf");
+}
+
 * {
-  font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue",
+  font-family: Segoe, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue",
     Ubuntu, sans-serif;
 }
 body {
