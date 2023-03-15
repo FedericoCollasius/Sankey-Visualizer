@@ -86,9 +86,7 @@ const loadSample = () => {
 };
 
 const saveToLocalStorage = () => {
-  console.log("asdasd");
   if (nodesTable && linksTypeTable && linksTable) {
-    console.log("Saving to local storage");
     localStorage.setItem("nodes", JSON.stringify(nodesTable.getData()));
     localStorage.setItem("linkTypes", JSON.stringify(linksTypeTable.getData()));
     localStorage.setItem("links", JSON.stringify(linksTable.getData()));
